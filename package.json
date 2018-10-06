@@ -1,0 +1,22 @@
+{
+  "name": "underdash",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JHenderson219/Underdash.git"
+  },
+  "author": "Jordan Henderson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JHenderson219/Underdash/issues"
+  },
+  "homepage": "https://github.com/JHenderson219/Underdash#readme",
+  "devDependencies": {
+    "jest": "^23.6.0"
+  }
+}
