@@ -1,5 +1,6 @@
-const _ = require('./index');
+let _ = require('./index');
 const arr = [0, 1, 2, 3, 4];
+const deepArr = [0, [1], [2, [[3]]]];
 const count = 3;
 const overCount = 7;
 const emptyArr = [];
@@ -58,4 +59,13 @@ test('_.last returns expected values', () => {
 test('_.rest returns expected values', () => {
     expect(_.rest(arr)).toEqual([1,2,3,4]);
     expect(_.rest(arr, count)).toEqual([3,4]);
+});
+
+// test('_.flatten returns expected values', () => {
+//     expect(_.flatten(deepArr)).toEqual([0, 1, 2, 3]);
+//     expect(_.flatten(deepArr, true)).toEqual([0, 1, 2, [[3]]]);
+// });
+
+test('_.without returns expected values', () => {
+    expect(_.without(arr, 2, 3)).toEqual([0,1,4]);
 });
