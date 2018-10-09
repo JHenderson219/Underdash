@@ -61,12 +61,43 @@ _.rest = (arr, n = 1) => {
 // }
 
 _.without = (arr, ...values) => {
- let output = arr.filter((element) => {
-   if (values.indexOf(element) < 0) {
-    return true;
-   }
- });
+  let valSet = new Set(values);
+  let output = arr.filter((element) => {
+    // "When in doubt, hash it out"
+    // value => new Set
+    // if set.has(element)
+    if (!valSet.has(element)) {
+      return true;
+    }
+  });
   return output;
+}
+
+// Collection methods -- do these next
+/**
+ * 
+ * @param {Object|Array} list 
+ * @param {Function} iteratee 
+ * @param {*} context
+ */
+_.each = (list, iteratee, context) => {
+  // for each element in list
+  if (list instanceof Object) {
+    list = Object.entries(list);
+  }
+  list.forEach((element, index) => {
+    if (element instanceof Array) {
+      element = element[1];
+      index = element[0];
+    }
+    if (context) {
+      iteratee = iteratee.bind(context)
+    }
+    iteratee(element, index, list);
+  });
+  return list;
+  // iteratee(element/value, index/ key, list)
+  // returns list
 }
 
 module.exports = _;
