@@ -75,6 +75,7 @@ _.without = (arr, ...values) => {
 
 // Collection methods -- do these next
 /**
+ * Iterates over plain object or array-like object list, calling a callback 'iteratee' once for each element/index in the array
  * 
  * @param {Object|Array} list 
  * @param {Function} iteratee 
@@ -82,22 +83,30 @@ _.without = (arr, ...values) => {
  */
 _.each = (list, iteratee, context) => {
   // for each element in list
+  let newList;
   if (list instanceof Object) {
-    list = Object.entries(list);
+    newList = Object.entries(list);
+    console.log('an object ->',list);
   }
-  list.forEach((element, index) => {
+  if (newList.length === 0) {
+    newList = list
+  }
+  if (context) {
+    iteratee = iteratee.bind(context)
+  }
+  newList.forEach((element, index) => {
     if (element instanceof Array) {
       element = element[1];
       index = element[0];
     }
-    if (context) {
-      iteratee = iteratee.bind(context)
-    }
-    iteratee(element, index, list);
+    let result = iteratee(element, index, list);
+    console.log(result);
   });
   return list;
-  // iteratee(element/value, index/ key, list)
-  // returns list
+}
+
+_.map = (list, iteratee, context) => {
+
 }
 
 module.exports = _;

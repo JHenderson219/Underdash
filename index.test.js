@@ -1,5 +1,6 @@
 let _ = require('./index');
 const arr = [0, 1, 2, 3, 4];
+const map = new Map(arr.map(element => [element, element]));
 const obj = {
   'zero': 0,
   'one': 1,
@@ -20,6 +21,8 @@ test('_.each returns the expected values', () => {
   const spy = jest.spyOn(_, 'each');
   _.each(arr, multByTwo);
   _.each(obj, multByTwo);
+  console.log(map);
+  _.each(map, multByTwo);
   expect(spy).toHaveBeenCalled();
 });
 test('_ is a function', () => {
