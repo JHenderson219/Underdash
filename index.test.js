@@ -23,6 +23,12 @@ test('_.each returns the expected values', () => {
   _.each(obj, multByTwo);
   expect(spy).toHaveBeenCalled();
 });
+
+test('_.map returns the expected values', () => {
+  expect(_.map(arr, multByTwo)).toEqual([0,2,4,6,8]);
+  expect(_.map(obj, multByTwo)).toEqual([0,2,4,6,8]);
+})
+
 test('_ is a function', () => {
   expect(typeof _).toBe('function');
 });

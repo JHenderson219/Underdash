@@ -1,7 +1,32 @@
 let _ = () => {
-  // refactor as class with static methods?
-};
 
+};
+/**
+ * Converts a list (object, array, or array-like) into a 1d or 2d array
+ * @param {Object|Array} list 
+ * @return {Array} 1d array of values, or 2d array of keys and values
+ */
+const listConvert = (list) => {
+  if (!list.length || list.length <= 0) {
+    // If list is an object, get a 2d array of entries from it
+    list = Object.entries(list);
+  } else {
+    // If list is an array-like, convert into a full array
+    Array.from(list);
+  }
+  return list;
+}
+/**
+ * Binds a given function to a given context, returning the bound function
+ * @param {Function} func a function to be bound to a given context
+ * @param {*} context context to bind this function to
+ */
+const bindContext = (func, context) => {
+  if (context) {
+    func = func.bind(context);
+  }
+  return func;
+}
 // Collection methods
 /**
  * Iterates over plain object or array-like object list, calling a callback 'iteratee' once for each element/index in the array
@@ -11,18 +36,13 @@ let _ = () => {
  * @param {*} context context to act as the 'this' value from inside of iteratee
  */
 _.each = (list, iteratee, context) => {
-  if (!list.length) {
-    // If list is an object, get a 2d array of entries from it
-    list = Object.entries(list);
-  }
-  if (context) {
-    // bind the iteratee to passed-in context
-    iteratee = iteratee.bind(context)
-  }
-  list.forEach((element, index) => {
+  let newList = listConvert(list);
+  iteratee = bindContext(iteratee, context);
+
+  newList.forEach((element, index) => {
     // iterate over each element
     if (element instanceof Array) {
-      // if it's an array, reassign elements
+      // if it's an array, reassign elements, as keys will be in index 0 and values in index 1
       element = element[1];
       index = element[0];
     }
@@ -32,7 +52,20 @@ _.each = (list, iteratee, context) => {
 }
 
 _.map = (list, iteratee, context) => {
+  let newList = listConvert(list);
+  iteratee = bindContext(iteratee, context);
 
+  let out = newList.map((element, index) => {
+    // Map over each element
+    if (element instanceof Array) {
+      // if it's an array, reassign elements, as keys will be in index 0 and values in index 1
+      element = element[1];
+      index = element[0];
+    }
+    // Return modified value
+    return iteratee(element, index);
+  });
+  return out;
 }
 
 
