@@ -2,6 +2,41 @@ let _ = () => {
   // refactor as class with static methods?
 };
 
+// Collection methods
+/**
+ * Iterates over plain object or array-like object list, calling a callback 'iteratee' once for each element/index in the array
+ * 
+ * @param {Object|Array} list 
+ * @param {Function} iteratee callback function to be called for every entry in the list
+ * @param {*} context context to act as the 'this' value from inside of iteratee
+ */
+_.each = (list, iteratee, context) => {
+  if (!list.length) {
+    // If list is an object, get a 2d array of entries from it
+    list = Object.entries(list);
+  }
+  if (context) {
+    // bind the iteratee to passed-in context
+    iteratee = iteratee.bind(context)
+  }
+  list.forEach((element, index) => {
+    // iterate over each element
+    if (element instanceof Array) {
+      // if it's an array, reassign elements
+      element = element[1];
+      index = element[0];
+    }
+    iteratee(element, index, list);
+  });
+  return list;
+}
+
+_.map = (list, iteratee, context) => {
+
+}
+
+
+
 // Helper methods
 _.checkInputType = (input, type) => {
   if (!input || !type) {
@@ -39,27 +74,6 @@ _.rest = (arr, n = 1) => {
   return arr.slice(n, arr.length);
 }
 
-// _.flatten = (arr, shallow) => {
-//     _.checkInputType(arr, Array);
-//     // flatten nested array
-//     // if shallow, only flatten one level
-//     if (shallow) {
-
-//     }
-//     console.log('input arr', arr);
-
-//     let output = arr.map((element) => {
-//         if (Array.isArray(element)){
-//             console.log('element is array');
-//             console.log('arr', arr, 'element', element);
-//         }
-//         console.log('returning', element);
-//         return element;
-//     });
-//     console.log('output', output);
-//     return output;
-// }
-
 _.without = (arr, ...values) => {
   let valSet = new Set(values);
   let output = arr.filter((element) => {
@@ -72,41 +86,4 @@ _.without = (arr, ...values) => {
   });
   return output;
 }
-
-// Collection methods -- do these next
-/**
- * Iterates over plain object or array-like object list, calling a callback 'iteratee' once for each element/index in the array
- * 
- * @param {Object|Array} list 
- * @param {Function} iteratee 
- * @param {*} context
- */
-_.each = (list, iteratee, context) => {
-  // for each element in list
-  let newList;
-  if (list instanceof Object) {
-    newList = Object.entries(list);
-    console.log('an object ->',list);
-  }
-  if (newList.length === 0) {
-    newList = list
-  }
-  if (context) {
-    iteratee = iteratee.bind(context)
-  }
-  newList.forEach((element, index) => {
-    if (element instanceof Array) {
-      element = element[1];
-      index = element[0];
-    }
-    let result = iteratee(element, index, list);
-    console.log(result);
-  });
-  return list;
-}
-
-_.map = (list, iteratee, context) => {
-
-}
-
 module.exports = _;

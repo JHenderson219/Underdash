@@ -21,8 +21,6 @@ test('_.each returns the expected values', () => {
   const spy = jest.spyOn(_, 'each');
   _.each(arr, multByTwo);
   _.each(obj, multByTwo);
-  console.log(map);
-  _.each(map, multByTwo);
   expect(spy).toHaveBeenCalled();
 });
 test('_ is a function', () => {
