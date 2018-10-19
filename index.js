@@ -6,15 +6,21 @@ let _ = () => {
  * @param {Object|Array} list 
  * @return {Array} 1d array of values, or 2d array of keys and values
  */
-const listConvert = (list) => {
+const listToMap = (list) => {
+  let map;
   if (!list.length || list.length <= 0) {
-    // If list is an object, get a 2d array of entries from it
+    // If list is an object
     list = Object.entries(list);
+    map = new Map(list);
   } else {
     // If list is an array-like, convert into a full array
-    Array.from(list);
+    list = Array.from(list);
+    map = new Map();
+    list.forEach((element, index) => {
+      map.set(element, index);
+    });
   }
-  return list;
+  return map;
 }
 /**
  * Binds a given function to a given context, returning the bound function
@@ -36,34 +42,23 @@ const bindContext = (func, context) => {
  * @param {*} context context to act as the 'this' value from inside of iteratee
  */
 _.each = (list, iteratee, context) => {
-  let newList = listConvert(list);
+  let newList = listToMap(list);
   iteratee = bindContext(iteratee, context);
 
-  newList.forEach((element, index) => {
-    // iterate over each element
-    if (element instanceof Array) {
-      // if it's an array, reassign elements, as keys will be in index 0 and values in index 1
-      element = element[1];
-      index = element[0];
-    }
-    iteratee(element, index, list);
+  newList.forEach((value, key) => {
+    // iterate over each element, calling iteratee once for each
+    iteratee(value, key, newList);
   });
   return list;
 }
 
 _.map = (list, iteratee, context) => {
-  let newList = listConvert(list);
+  let newList = listToMap(list);
   iteratee = bindContext(iteratee, context);
-
-  let out = newList.map((element, index) => {
-    // Map over each element
-    if (element instanceof Array) {
-      // if it's an array, reassign elements, as keys will be in index 0 and values in index 1
-      element = element[1];
-      index = element[0];
-    }
-    // Return modified value
-    return iteratee(element, index);
+  let out = [];
+  newList.forEach((element, index) => {
+    let result = iteratee(element, index, newList);
+    out.push(result);
   });
   return out;
 }
